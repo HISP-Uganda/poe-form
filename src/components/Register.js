@@ -6,20 +6,8 @@ import {useMutation} from '@apollo/react-hooks';
 
 
 const CREATE_COMPANY = gql`
-  mutation CreateCompany(
-    $address:String
-    $companyName:String
-    $companyRegistrationNo:String
-    $country:String
-    $directorContact:String
-    $email:String
-    $issuingCountry:String
-    $manager2Contact:String
-    $managerContact:String
-    $password:String
-    $phone:String
-    $tin:String
-    $type:String
+  mutation createCompany(
+    $input: CompanyInput!
   ) {
     createCompany(input: {
       company: {
@@ -55,7 +43,7 @@ export const Register = () => {
   const onFinish = async values => {
     let {prefix, phone, ...data} = values;
     data = {...data, phone: prefix + phone}
-    await createCompany({variables: {...data}});
+    await createCompany({variables: {input:{company:data}}});
     console.log(data);
     // history.push("/home");
   };

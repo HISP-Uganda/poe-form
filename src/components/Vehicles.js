@@ -16,7 +16,7 @@ const columns = [
 export const Vehicles = () => {
   const history = useHistory();
   const [value] = useLocalStorage('jwt');
-  const { loading, error, data } = useQuery(GET_VEHICLES, { variables: { condition: { companyId: value } } });
+  const { loading, error, data } = useQuery(GET_VEHICLES, { variables: { condition: { company: value } } });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;

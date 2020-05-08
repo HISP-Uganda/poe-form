@@ -32,7 +32,7 @@
 .left{
   width: 50%;
   height: 100vh;
-  background: aquamarine;
+  background: #001529;
 }
 
 .right{
@@ -67,7 +67,7 @@
   float: left;
 }
 .layout{
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .content{
@@ -81,56 +81,6 @@
 .border {
   border-color: #cbd5e0;
   border-width: 1px;
-}
-
-
-#demo-link-docs {
-  float: right;
-}
-#demo-title {
-  margin-top: 50px;
-  margin-bottom: 50px;
-  text-align: center;
-}
-#demo-selected {
-  float: right;
-  display: none;
-}
-#demo-paste-selected {
-  background-color: #ff9;
-  padding: 5px;
-}
-.demo-instance {
-  border: 1px solid #ccc;
-  margin-bottom: 40px;
-  padding: 10px;
-  background-color: #eee;
-  border-radius: 0.25rem;
-}
-.demo {
-  margin-top: 20px;
-}
-.demo::after {
-  clear: both;
-  content: "";
-  display: block;
-}
-.demo-search {
-  float: left;
-  margin-bottom: 20px;
-}
-.demo input {
-  width: 400px;
-  height: 1.2rem;
-  font-size: 0.9rem;
-  padding-left: 4px;
-}
-.demo-clear {
-  cursor: pointer;
-  padding: 2px;
-}
-.ctw-window {
-  background-color: #fff;
 }
 
 .p-1 {

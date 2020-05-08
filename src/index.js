@@ -8,7 +8,7 @@ import ApolloClient from 'apollo-boost';
 import {ApolloProvider} from '@apollo/react-hooks';
 
 const client = new ApolloClient({
-  uri: 'https://api.hispuganda.org/graphql',
+  uri: 'https://api.hispuganda.org/graphql'
 });
 
 

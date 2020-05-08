@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useMutation } from '@apollo/react-hooks';
 import { login, } from './utils';
 import bcrypt from 'bcryptjs';
-import { CREATE_COMPANY } from "./utils";
+import { CREATE_COMPANY, COUNTRIES } from "./utils";
 
 const { Option } = Select;
 
@@ -73,7 +73,14 @@ export const Register = () => {
           label="TIN Issuing Country"
           rules={[]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {COUNTRIES.map(country => <Option key={country.code} value={country.code}>{country.name}</Option>)}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -84,14 +91,18 @@ export const Register = () => {
         >
           <Input />
         </Form.Item>
-
         <Form.Item
           style={{ margin: 0 }}
           name="type"
           label="Type of Company"
           rules={[]}
         >
-          <Input />
+          <Select>
+            <Option value="Freight">Freight</Option>
+            <Option value="Forwarders">Forwarders</Option>
+            <Option value="Transport Company">Transport Company</Option>
+            <Option value="Individual">Individual</Option>
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -109,7 +120,14 @@ export const Register = () => {
           label="Country of Registration"
           rules={[]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {COUNTRIES.map(country => <Option key={country.code} value={country.code}>{country.name}</Option>)}
+          </Select>
         </Form.Item>
         <Form.Item
           style={{ margin: 0 }}

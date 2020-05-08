@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, Card, Form, Input } from 'antd';
+import { Button, Card, Form, Input, DatePicker, Select, Checkbox, InputNumber } from 'antd';
 import { useHistory } from "react-router-dom";
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useLocalStorage } from 'react-use';
-import { CREATE_APPLICATION } from './utils'
+import { CREATE_APPLICATION, COUNTRIES, GET_STAFF, GET_VEHICLES } from './utils'
 
+const { Option } = Select
+const { TextArea } = Input
 
 export const ApplicationForm = () => {
   const [form] = Form.useForm();
@@ -12,11 +14,28 @@ export const ApplicationForm = () => {
   const [value] = useLocalStorage('jwt');
   const [createStaff] = useMutation(CREATE_APPLICATION);
 
+  const { loading: loadingStaff, error: staffErrors, data: staff } = useQuery(GET_STAFF, { variables: { condition: { companyId: value } } });
+  const { loading: loadingVehicles, error: vehicleErrors, data: vehicles } = useQuery(GET_VEHICLES, { variables: { condition: { company: value } } });
+
   const onFinish = async values => {
-    values = { ...values, company: value }
-    await createStaff({ variables: { input: { application: values } } });
-    history.push("/home/applications");
+    values = { ...values, company: value, applicationStatus: 'Approved' }
+    try {
+      await createStaff({ variables: { input: { application: values } } });
+      history.push("/home/applications");
+    } catch (e) {
+
+    }
   };
+
+  const onChangeVehicle = (value) => {
+    const vehicle = vehicles.allVehicles.nodes.find(v => v.id === value);
+    if (vehicle) {
+      form.setFieldsValue({ driver: vehicle.principleDriver, assistantDriver: vehicle.optionalDriver });
+    }
+  }
+
+  if (loadingStaff || loadingVehicles) return <p>Loading...</p>;
+  if (staffErrors || vehicleErrors) return <p>Error :(</p>;
   return (
     <Card
       title="Registration"
@@ -24,6 +43,7 @@ export const ApplicationForm = () => {
         width: '50%',
         margin: 'auto',
       }}>
+
       <Form
         form={form}
         name="register"
@@ -39,36 +59,62 @@ export const ApplicationForm = () => {
           style={{ margin: 0 }}
           name="applicationDate"
           label="Date of Application"
-          rules={[]}
+          rules={[{ required: true, message: 'Pick date of application' }]}
         >
-          <Input />
+          <DatePicker />
         </Form.Item>
 
-        {/* <Form.Item
-          style={{ margin: 0 }}
+        <Form.Item
+          name="vehicle"
+          label="Vehicle"
+          rules={[{ required: true, message: 'Select type of vehicle' }]}
+        >
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+            onChange={onChangeVehicle}
+          >
+            {vehicles.allVehicles.nodes.map(vehicle => <Option key={vehicle.id} value={vehicle.id}>{vehicle.headRegistrationNo}</Option>)}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          valuePropName="checked"
           name="loaded"
-          label="Loaded "
           rules={[]}
         >
-          <Input />
-        </Form.Item> */}
+          <Checkbox>Loaded</Checkbox>
+        </Form.Item>
 
         <Form.Item
           style={{ margin: 0 }}
           name="typeOfGoods"
           label="Type of Goods"
-          rules={[]}
+          rules={[{ required: true, message: 'Select type of goods' }]}
         >
-          <Input />
+          <Select>
+            <Option value="Import">Import</Option>
+            <Option value="Exports">Exports</Option>
+            <Option value="Distribution">Distribution</Option>
+          </Select>
         </Form.Item>
 
         <Form.Item
           style={{ margin: 0 }}
           name="cargoNature"
           label="Cargo Nature"
-          rules={[]}
+          rules={[{ required: true, message: 'Select type of cargo nature' }]}
         >
-          <Input />
+          <Select>
+            <Option value="General">General</Option>
+            <Option value="Dangerous Goods">Dangerous Goods</Option>
+            <Option value="Empty">Empty</Option>
+            <Option value="Project or OG">Project or OG</Option>
+            <Option value="Perishable">Perishable</Option>
+            <Option value="Other">Other</Option>
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -76,8 +122,9 @@ export const ApplicationForm = () => {
           name="clientDetails"
           label="Client Details"
           rules={[]}
+          help="Please supply contacts, name, Phone, email, physical Address of client"
         >
-          <Input />
+          <TextArea rows={4} />
         </Form.Item>
 
         <Form.Item
@@ -86,7 +133,7 @@ export const ApplicationForm = () => {
           label="Expected date of departure"
           rules={[]}
         >
-          <Input />
+          <DatePicker showTime />
         </Form.Item>
         <Form.Item
           style={{ margin: 0 }}
@@ -94,16 +141,23 @@ export const ApplicationForm = () => {
           label="Expected date of arrival"
           rules={[]}
         >
-          <Input />
+          <DatePicker showTime />
         </Form.Item>
 
         <Form.Item
           style={{ margin: 0 }}
           name="departureCountry"
           label="Country of Departure"
-          rules={[]}
+          rules={[{ required: true, message: 'Select country of departure' }]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {COUNTRIES.map(country => <Option key={country.code} value={country.code}>{country.name}</Option>)}
+          </Select>
         </Form.Item>
         <Form.Item
           style={{ margin: 0 }}
@@ -118,24 +172,38 @@ export const ApplicationForm = () => {
           style={{ margin: 0 }}
           name="destinationCountry"
           label="Country of Destination"
-          rules={[]}
+          rules={[{ required: true, message: 'Select country of destination' }]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {COUNTRIES.map(country => <Option key={country.code} value={country.code}>{country.name}</Option>)}
+          </Select>
         </Form.Item>
 
         <Form.Item
           style={{ margin: 0 }}
           name="approvalTerminationCountry"
-          label="Where this travel apporval terminates (country)"
-          rules={[]}
+          label="Where this travel approval terminates (country)"
+          rules={[{ required: true, message: 'Select specify where this travel approval terminates (country)' }]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {COUNTRIES.map(country => <Option key={country.code} value={country.code}>{country.name}</Option>)}
+          </Select>
         </Form.Item>
         <Form.Item
           style={{ margin: 0 }}
           name="approvalTerminationCity"
-          label="Where this travel apporval terminates (city)"
-          rules={[]}
+          label="Where this travel approval terminates (city)"
+          rules={[{ required: true, message: 'Select specify where this travel approval terminates (city)' }]}
         >
           <Input />
         </Form.Item>
@@ -143,10 +211,10 @@ export const ApplicationForm = () => {
         <Form.Item
           style={{ margin: 0 }}
           name="approvalDistance"
-          label="Exxpected distance for the this approval"
+          label="Expected distance for the this approval"
           rules={[]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
 
         <Form.Item
@@ -155,17 +223,65 @@ export const ApplicationForm = () => {
           label="JMP expiry date"
           rules={[]}
         >
-          <Input />
+          <DatePicker showTime />
         </Form.Item>
+
+        <Form.Item
+          style={{ margin: 0 }}
+          name="driver"
+          label="Assigned PrincipleTruck driver"
+          rules={[]}
+        >
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {staff.allStaff.nodes.map(staff => <Option key={staff.id} value={staff.id}>{staff.passportNo}</Option>)}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          style={{ margin: 0 }}
+          name="assistantDriver"
+          label="Assigned Optional Truck driver"
+          rules={[]}
+        >
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {staff.allStaff.nodes.map(staff => <Option key={staff.id} value={staff.id}>{staff.passportNo}</Option>)}
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          style={{ margin: 0 }}
+          name="supervisor"
+          label="Supervisor"
+          rules={[]}
+        >
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {staff.allStaff.nodes.map(staff => <Option key={staff.id} value={staff.id}>{staff.passportNo}</Option>)}
+          </Select>
+        </Form.Item>
+
+
         <Form.Item
           style={{ margin: 0 }}
           name="lastVisitedCountries"
           label="Countries Visited in last 14 days"
           rules={[]}
         >
-          <Input />
+          <TextArea rows={4} />
         </Form.Item> <Form.Item
-          style={{ margin: 0 }}
           name="ugandaPhysicalAddress"
           label="Physical address in Uganda"
           rules={[]}

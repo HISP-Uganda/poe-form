@@ -1,11 +1,11 @@
 import React from 'react';
-import { Button, Card, Form, Input, Select } from 'antd';
+import { Button, Card, Form, Input, Select, DatePicker } from 'antd';
 import { useHistory } from "react-router-dom";
 import { useMutation } from '@apollo/react-hooks';
 import { useLocalStorage } from 'react-use';
-import { CREATE_STAFF } from "./utils";
+import { CREATE_STAFF, COUNTRIES } from "./utils";
 
-
+const { Option } = Select;
 export const StaffForm = () => {
   const [form] = Form.useForm();
   let history = useHistory();
@@ -15,7 +15,6 @@ export const StaffForm = () => {
   const onFinish = async values => {
     values = { ...values, companyId: value }
     await createStaff({ variables: { input: { staff: values } } });
-    history.push("/home/staff");
     history.push("/home/staff");
   };
   return (
@@ -33,7 +32,7 @@ export const StaffForm = () => {
         size="large"
         onFinish={onFinish}
         initialValues={{
-          prefix: '+256',
+          sex: 'Male',
         }}
         scrollToFirstError
       >
@@ -43,7 +42,11 @@ export const StaffForm = () => {
           label="Designation"
           rules={[]}
         >
-          <Input />
+          <Select>
+            <Option value="Driver">Driver</Option>
+            <Option value="Supervisor">Supervisor</Option>
+            <Option value="Manager">Manager</Option>
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -79,7 +82,14 @@ export const StaffForm = () => {
           label="Nationality"
           rules={[]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {COUNTRIES.map(country => <Option key={country.code} value={country.code}>{country.name}</Option>)}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -88,7 +98,7 @@ export const StaffForm = () => {
           label="Date of Birth"
           rules={[]}
         >
-          <Input />
+          <DatePicker />
         </Form.Item>
         <Form.Item
           style={{ margin: 0 }}
@@ -96,7 +106,10 @@ export const StaffForm = () => {
           label="Gender"
           rules={[]}
         >
-          <Input />
+          <Select>
+            <Option value="Male">Male</Option>
+            <Option value="Female">Female</Option>
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -113,7 +126,14 @@ export const StaffForm = () => {
           label="DP Issuing Authority"
           rules={[]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {COUNTRIES.map(country => <Option key={country.code} value={country.code}>{country.name}</Option>)}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -231,7 +251,6 @@ export const StaffForm = () => {
         </Form.Item>
 
         <Form.Item
-          style={{ margin: 0 }}
           name="nok2Relationship"
           label="NOK 2 Relationship"
           rules={[]}

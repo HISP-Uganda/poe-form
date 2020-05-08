@@ -1,22 +1,28 @@
 import React from 'react';
-import { Button, Card, Form, Input, InputNumber } from 'antd';
+import { Button, Card, Form, Input, InputNumber, Select } from 'antd';
 import { useHistory } from "react-router-dom";
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useLocalStorage } from 'react-use';
-import { CREATE_VEHICLE } from "./utils";
+import { CREATE_VEHICLE, COUNTRIES, GET_STAFF } from "./utils";
 
+const { Option } = Select;
 export const VehicleForm = () => {
   const [form] = Form.useForm();
   let history = useHistory();
 
   const [value] = useLocalStorage('jwt');
   const [createVehicle] = useMutation(CREATE_VEHICLE);
+  const { loading, error, data } = useQuery(GET_STAFF, { variables: { condition: { companyId: value } } });
+
 
   const onFinish = async values => {
     values = { ...values, company: value }
     await createVehicle({ variables: { input: { vehicle: values } } });
     history.push("/home/vehicles");
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
 
   return (
     <Card
@@ -32,7 +38,7 @@ export const VehicleForm = () => {
         size="large"
         onFinish={onFinish}
         initialValues={{
-          prefix: '+256',
+          manufactureYear: 1995,
         }}
         scrollToFirstError
       >
@@ -42,7 +48,14 @@ export const VehicleForm = () => {
           label="Country of Truck Head Registration"
           rules={[]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {COUNTRIES.map(country => <Option key={country.code} value={country.code}>{country.name}</Option>)}
+          </Select>
         </Form.Item>
         <Form.Item
           style={{ margin: 0 }}
@@ -58,7 +71,14 @@ export const VehicleForm = () => {
           label="Assigned PrincipleTruck driver"
           rules={[]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {data.allStaff.nodes.map(staff => <Option key={staff.id} value={staff.id}>{staff.passportNo}</Option>)}
+          </Select>
         </Form.Item>
         <Form.Item
           style={{ margin: 0 }}
@@ -66,7 +86,14 @@ export const VehicleForm = () => {
           label="Assigned Optional Truck driver"
           rules={[]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {data.allStaff.nodes.map(staff => <Option key={staff.id} value={staff.id}>{staff.passportNo}</Option>)}
+          </Select>
         </Form.Item>
 
         <Form.Item
@@ -75,7 +102,7 @@ export const VehicleForm = () => {
           label="Year of Manufacture"
           rules={[]}
         >
-          <InputNumber min={1990} defaultValue={1990} />
+          <InputNumber min={1990} />
         </Form.Item>
 
         <Form.Item
@@ -84,10 +111,13 @@ export const VehicleForm = () => {
           label="Truck configuration"
           rules={[]}
         >
-          <Input />
+          <Select>
+            <Option value="Rigid">Rigid</Option>
+            <Option value="Articulated">Articulated</Option>
+            <Option value="Pulling">Pulling</Option>
+          </Select>
         </Form.Item>
         <Form.Item
-          style={{ margin: 0 }}
           name="model"
           label="Model"
           rules={[]}

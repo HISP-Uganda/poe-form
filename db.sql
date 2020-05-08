@@ -109,3 +109,13 @@ where
   email = mail
 limit
   1 $$ language sql stable;
+
+  CREATE INDEX ON application (company);
+  CREATE INDEX ON application (vehicle);
+  CREATE INDEX ON application (driver);
+  CREATE INDEX ON application (assistant_driver);
+  CREATE INDEX ON application (supervisor);
+  CREATE INDEX ON staff (company_id);
+  CREATE INDEX ON vehicle (principle_driver);
+  CREATE INDEX ON vehicle (optional_driver);
+  CREATE INDEX ON vehicle (company);

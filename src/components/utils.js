@@ -19,11 +19,31 @@ query getStaff($condition:StaffCondition) {
   allStaff(condition: $condition) {
     nodes{
       id
+      dob
       firstName
       lastName
       nationalIdNo
       nationality
+      nok2Name
+      nok2Phone
+      nok2Relationship
+      nok2Residence
+      nokName
+      nokPhone
+      nokRelationship
+      nokResidence
+      otherNames
       passportNo
+      permitIssuer
+      permitNo
+      phoneConcat1
+      phoneConcat2
+      residenceArea
+      residenceCity
+      residenceCountry
+      role
+      sex
+      designation
     }
   }
 }
@@ -103,8 +123,8 @@ query getVehicles($condition:VehicleCondition) {
     nodes{
       id
       headRegistrationNo
-      principleDriver
-      optionalDriver
+      manufactureYear
+      configuration
     }
   }
 }

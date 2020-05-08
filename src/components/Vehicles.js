@@ -11,6 +11,20 @@ const columns = [
     title: 'ID',
     dataIndex: 'id',
     key: 'id',
+  },
+  {
+    title: 'Head Registration No',
+    dataIndex: 'headRegistrationNo',
+    key: 'headRegistrationNo',
+  },
+  {
+    title: 'Year of Manufacture',
+    dataIndex: 'manufactureYear',
+    key: 'manufactureYear',
+  },{
+    title: 'Configuration',
+    dataIndex: 'configuration',
+    key: 'configuration',
   }
 ];
 export const Vehicles = () => {

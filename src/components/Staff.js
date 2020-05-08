@@ -9,19 +9,56 @@ import { GET_STAFF } from "./utils";
 
 const columns = [
   {
-    title: 'Name',
+    title: 'First Name',
     dataIndex: 'firstName',
     key: 'firstName',
   },
   {
-    title: 'Age',
+    title: 'Last Name',
     dataIndex: 'lastName',
     key: 'lastName',
+  }, {
+    title: 'Other Names',
+    dataIndex: 'otherNames',
+    key: 'otherNames',
   },
   {
-    title: 'Address',
+    title: 'National ID',
     dataIndex: 'nationalIdNo',
     key: 'nationalIdNo',
+  },{
+    title: 'Nationality',
+    dataIndex: 'nationality',
+    key: 'nationality',
+  }
+  ,{
+    title: 'Country of Residence',
+    dataIndex: 'residenceCountry',
+    key: 'residenceCountry',
+  },{
+    title: 'Passport No',
+    dataIndex: 'passportNo',
+    key: 'passportNo',
+  },{
+    title: 'Driving Permit Number',
+    dataIndex: 'permitNo',
+    key: 'permitNo',
+  },{
+    title: 'Driving Permit Issuer',
+    dataIndex: 'permitIssuer',
+    key: 'permitIssuer',
+  },{
+    title: 'Phone contact',
+    dataIndex: 'phoneConcat1',
+    key: 'phoneConcat1',
+  },{
+    title: 'Designation',
+    dataIndex: 'designation',
+    key: 'designation',
+  },{
+    title: 'Gender',
+    dataIndex: 'sex',
+    key: 'sex',
   },
 ];
 export const Staff = () => {

@@ -1,47 +1,41 @@
 import React from "react";
-import {Card, Table} from "antd";
+import { Card, Table } from "antd";
 import PlusOutlined from "@ant-design/icons/lib/icons/PlusOutlined";
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import { useQuery } from '@apollo/react-hooks';
+import { useLocalStorage } from 'react-use';
+import { GET_STAFF } from "./utils";
 
-const dataSource = [
-  {
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street',
-  },
-  {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street',
-  },
-];
 
 const columns = [
   {
     title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: 'firstName',
+    key: 'firstName',
   },
   {
     title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
+    dataIndex: 'lastName',
+    key: 'lastName',
   },
   {
     title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
+    dataIndex: 'nationalIdNo',
+    key: 'nationalIdNo',
   },
 ];
 export const Staff = () => {
+  const [value] = useLocalStorage('jwt');
+  const { loading, error, data } = useQuery(GET_STAFF, { variables: { condition: { companyId: value } } });
   const history = useHistory();
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
   const addApplication = () => {
     history.push('/home/staff-form')
   }
   return <Card title="Staff"
-               extra={<PlusOutlined style={{fontSize: 24, cursor: 'pointer'}} onClick={addApplication}/>}>
-    <Table dataSource={dataSource} columns={columns}/>
+    extra={<PlusOutlined style={{ fontSize: 24, cursor: 'pointer' }} onClick={addApplication} />}>
+    <Table dataSource={data.allStaff.nodes} columns={columns} rowKey="id" />
   </Card>
 }

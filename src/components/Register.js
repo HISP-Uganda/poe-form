@@ -1,51 +1,28 @@
 import React from 'react';
-import {Button, Card, Form, Input, Select} from 'antd';
-import {useHistory} from "react-router-dom";
-import gql from 'graphql-tag';
-import {useMutation} from '@apollo/react-hooks';
+import { Button, Card, Form, Input, Select } from 'antd';
+import { useHistory } from "react-router-dom";
+import { useMutation } from '@apollo/react-hooks';
+import { login, } from './utils';
+import bcrypt from 'bcryptjs';
+import { CREATE_COMPANY } from "./utils";
 
-
-const CREATE_COMPANY = gql`
-  mutation createCompany(
-    $input: CompanyInput!
-  ) {
-    createCompany(input: {
-      company: {
-        address: $address
-        companyName: $companyName
-        companyRegistrationNo: $companyRegistrationNo
-        country: $country
-        directorContact: $directorContact
-        email: $email
-        issuingCountry: $issuingCountry
-        manager2Contact: $manager2Contact
-        managerContact: $managerContact
-        password: $password
-        phone: $phone
-        tin: $tin
-        type: $type
-      }
-    }){
-      id
-    }
-  }
-`;
-
-const {Option} = Select;
+const { Option } = Select;
 
 export const Register = () => {
   const [form] = Form.useForm();
 
-  const [createCompany, {data}] = useMutation(CREATE_COMPANY);
+  const [createCompany] = useMutation(CREATE_COMPANY);
 
   let history = useHistory();
 
   const onFinish = async values => {
-    let {prefix, phone, ...data} = values;
-    data = {...data, phone: prefix + phone}
-    await createCompany({variables: {input:{company:data}}});
-    console.log(data);
-    // history.push("/home");
+    let { prefix, confirm, phone, password, ...others } = values;
+    const salt = bcrypt.genSaltSync(10);
+    password = bcrypt.hashSync(password, salt);
+    others = { ...others, phone: prefix + phone, password }
+    const { data } = await createCompany({ variables: { input: { company: others } } });
+    login(data.createCompany.company.id)
+    history.push("/home");
   };
 
   const prefixSelector = (
@@ -82,69 +59,69 @@ export const Register = () => {
         scrollToFirstError
       >
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="tin"
           label="Compnay / Individual TIN"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="issuingCountry"
           label="TIN Issuing Country"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="companyRegistrationNo"
           label="Company Registration No"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="type"
           label="Type of Company"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="companyName"
           label="Registered Company / Individual Name"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="country"
           label="Country of Registration"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="address"
           label="Physical Address"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="phone"
           label="Office Phone No"
           rules={[]}
@@ -158,45 +135,45 @@ export const Register = () => {
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="email"
           label="Company email address"
-          rules={[{type: 'email', message: 'The input is not valid E-mail!'}, {
+          rules={[{ type: 'email', message: 'The input is not valid E-mail!' }, {
             required: true,
             message: 'Please supply email address'
           }]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="directorContact"
           label="Company Head/Director Contact"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="managerContact"
           label="Senior manager contact"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="manager2Contact"
           label="Senior manager contact 2"
           rules={[]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
-          style={{margin: 0}}
+          style={{ margin: 0 }}
           name="password"
           label="Password"
           rules={[
@@ -207,7 +184,7 @@ export const Register = () => {
           ]}
           hasFeedback
         >
-          <Input.Password/>
+          <Input.Password />
         </Form.Item>
 
         <Form.Item
@@ -220,7 +197,7 @@ export const Register = () => {
               required: true,
               message: 'Please confirm your password!',
             },
-            ({getFieldValue}) => ({
+            ({ getFieldValue }) => ({
               validator(rule, value) {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
@@ -230,7 +207,7 @@ export const Register = () => {
             }),
           ]}
         >
-          <Input.Password/>
+          <Input.Password />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">

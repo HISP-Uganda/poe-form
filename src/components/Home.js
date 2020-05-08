@@ -1,19 +1,18 @@
 import React from "react";
-import {Link, Route, Switch, useHistory, useRouteMatch} from "react-router-dom";
-import {Applications} from "./Applications";
-// import {Dashboard} from "./Dashboard";
-import {Staff} from "./Staff";
-import {Layout, Menu} from 'antd';
-import {ApplicationForm} from "./ApplicationForm";
-import {StaffForm} from "./StaffForm";
-import {Vehicles} from "./Vehicles";
-import {VehicleForm} from "./VehicleForm";
-import {logout} from "./utils";
+import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { Applications } from "./Applications";
+import { Staff } from "./Staff";
+import { Layout, Menu } from 'antd';
+import { ApplicationForm } from "./ApplicationForm";
+import { StaffForm } from "./StaffForm";
+import { Vehicles } from "./Vehicles";
+import { VehicleForm } from "./VehicleForm";
+import { logout } from "./utils";
 
-const {Header, Content, Footer} = Layout;
+const { Header, Content, Footer } = Layout;
 
 export const Home = () => {
-  let {path, url} = useRouteMatch();
+  let { path, url } = useRouteMatch();
   const history = useHistory();
 
   const destroy = () => {
@@ -23,39 +22,39 @@ export const Home = () => {
   return (
     <Layout className="layout">
       <Header>
-        <div className="logo"/>
-        <Menu theme="dark" mode="horizontal" style={{display: 'flex'}}>
+        <div className="logo" />
+        <Menu theme="dark" mode="horizontal" style={{ display: 'flex' }}>
           <Menu.Item key="1"><Link to={`${url}/applications`}>Applications</Link></Menu.Item>
           <Menu.Item key="2"><Link to={`${url}/staff`}>Staff</Link></Menu.Item>
           <Menu.Item key="3"><Link to={`${url}/vehicles`}>Vehicles</Link></Menu.Item>
-          <Menu.Item key="4" style={{marginLeft: 'auto'}} onClick={destroy}>Logout</Menu.Item>
+          <Menu.Item key="4" style={{ marginLeft: 'auto' }} onClick={destroy}>Logout</Menu.Item>
         </Menu>
       </Header>
       <Content className="content">
         <Switch>
           <Route exact path={path}>
-            <Applications/>
+            <Applications />
           </Route>
           <Route path={`${path}/applications`}>
-            <Applications/>
+            <Applications />
           </Route>
           <Route path={`${path}/vehicles`}>
-            <Vehicles/>
+            <Vehicles />
           </Route><Route path={`${path}/staff`}>
-          <Staff/>
-        </Route>
+            <Staff />
+          </Route>
           <Route path={`${path}/application-form`}>
-            <ApplicationForm/>
+            <ApplicationForm />
           </Route>
           <Route path={`${path}/staff-form`}>
-            <StaffForm/>
+            <StaffForm />
           </Route>
           <Route path={`${path}/vehicle-form`}>
-            <VehicleForm/>
+            <VehicleForm />
           </Route>
         </Switch>
       </Content>
-      <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
+      <Footer style={{ textAlign: 'center' }}>HISP Uganda ©2020</Footer>
     </Layout>
   )
 }

@@ -1,22 +1,22 @@
 import React from 'react';
-import {HashRouter as Router, Route, Switch} from "react-router-dom";
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import './App.css';
 import 'antd/dist/antd.css'
-import {Home} from "./components/Home";
-import {Login} from "./components/Login";
-import {Register} from "./components/Register";
+import { Home } from "./components/Home";
+import { Login } from "./components/Login";
+import { Register } from "./components/Register";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
     <Router>
       <Switch>
-        <PrivateRoute path="/home" component={Home}/>
+        <PrivateRoute path="/home" component={Home} />
         <Route path="/register">
-          <Register/>
+          <Register />
         </Route>
         <Route path="/">
-          <Login/>
+          <Login />
         </Route>
       </Switch>
     </Router>

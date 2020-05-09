@@ -137,7 +137,7 @@ const PrinterFriendly = () => {
         </tr>
       </tbody>
     </table>
-    <QrCode value={verifier} style={{ marginBottom: 20, width: 128, height: 128 }} renderAs="svg" />
+    <QrCode value={verifier} style={{ marginBottom: 20, width: 192, height: 192, marginLeft:'45%',marginRight:'auto' }} renderAs="svg" />
   </Card>
 }
 

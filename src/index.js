@@ -6,6 +6,9 @@ import * as serviceWorker from './serviceWorker';
 
 import ApolloClient from 'apollo-boost';
 import {ApolloProvider} from '@apollo/react-hooks';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
 
 const client = new ApolloClient({
   uri: 'https://api.hispuganda.org/graphql'

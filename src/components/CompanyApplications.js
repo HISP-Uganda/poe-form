@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Table } from "antd";
 import PlusOutlined from "@ant-design/icons/lib/icons/PlusOutlined";
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
 import { useLocalStorage } from 'react-use';
 import { GET_COMPANY_APPLICATIONS } from './utils'
@@ -98,6 +98,18 @@ export const CompanyApplications = () => {
         title="Company Applications"
         extra={<PlusOutlined style={{ fontSize: 24, cursor: 'pointer' }} onClick={addApplication} />}
     >
-        <Table dataSource={data.allApplications.nodes} columns={columns} rowKey="id" scroll={{ x: 1300 }} />
+        <Table
+            rowClassName={(record, index) => index % 2 === 0 ? 'table-row-light' : 'table-row-dark'}
+            onRow={(record, rowIndex) => {
+                return {
+                    onClick: event => {
+                        history.push(`/home/applications/${record['id']}`);
+                    },
+                };
+            }}
+            dataSource={data.allApplications.nodes} columns={columns}
+            rowKey="id"
+            scroll={{ x: 1300 }}
+        />
     </Card>
 }

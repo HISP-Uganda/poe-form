@@ -176,6 +176,7 @@ query getApplication($id:UUID!){
     ugandaPhysicalAddress
     vehicleByVehicle {
       configuration
+      headRegistrationNo
     }
     staffByDriver {
       dob
@@ -229,6 +230,10 @@ query getApplication($id:UUID!){
       residenceCountry
       role
       sex
+    }
+    staffBySupervisor {
+      lastName
+      firstName
     }
   }
 }

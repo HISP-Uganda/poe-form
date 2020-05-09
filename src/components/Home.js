@@ -24,9 +24,9 @@ export const Home = () => {
       <Header>
         <div className="logo" />
         <Menu theme="dark" mode="horizontal" style={{ display: 'flex' }}>
-          <Menu.Item key="1"><Link to={`${url}/applications`}>Applications</Link></Menu.Item>
           <Menu.Item key="2"><Link to={`${url}/staff`}>Staff</Link></Menu.Item>
           <Menu.Item key="3"><Link to={`${url}/vehicles`}>Vehicles</Link></Menu.Item>
+          <Menu.Item key="1"><Link to={`${url}/applications`}>Applications</Link></Menu.Item>
           <Menu.Item key="4" style={{ marginLeft: 'auto' }} onClick={destroy}>Logout</Menu.Item>
         </Menu>
       </Header>

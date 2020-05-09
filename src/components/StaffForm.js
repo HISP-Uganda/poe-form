@@ -17,6 +17,18 @@ export const StaffForm = () => {
     await createStaff({ variables: { input: { staff: values } } });
     history.push("/home/staff");
   };
+
+  // const dummyRequest = async ({file, onSuccess}) => {
+  //   const reader = new FileReader();
+  //   reader.readAsDataURL(file);
+  //   reader.onload = () => {
+  //     const data = reader.result;
+  //     onSuccess('ok');
+  //     file = null;
+  //   };
+  //   reader.onerror = error => console.log(error);
+  // };
+  
   return (
     <Card
       title="Registration"

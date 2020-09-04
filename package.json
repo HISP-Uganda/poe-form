@@ -19,7 +19,7 @@
     "react-scripts": "3.4.1",
     "react-to-print": "^2.7.0",
     "react-use": "^14.2.0",
-    "simple-crypto-js": "^2.2.0"
+    "simple-crypto-js": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
